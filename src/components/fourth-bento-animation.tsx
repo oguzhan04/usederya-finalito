@@ -5,6 +5,7 @@ import {
   motion,
   useInView,
   useMotionValue,
+  useMotionValueEvent,
   useSpring,
 } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -49,6 +50,36 @@ export function FourthBentoAnimation({
     stiffness: 400,
   });
 
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const daysRef = useRef<HTMLDivElement | null>(null);
+  const [dayLabel, setDayLabel] = useState("Thu");
+  const lastDayRef = useRef("Thu");
+
+  // Update the cursor label to the day it's currently over.
+  useMotionValueEvent(smoothX, "change", (latest) => {
+    const root = rootRef.current;
+    const days = daysRef.current;
+    if (!root || !days) return;
+    const rootLeft = root.getBoundingClientRect().left;
+    const spans = Array.from(days.children) as HTMLElement[];
+    let best = 0;
+    let bestDist = Infinity;
+    spans.forEach((span, i) => {
+      const r = span.getBoundingClientRect();
+      const center = r.left - rootLeft + r.width / 2;
+      const dist = Math.abs(latest - center);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = i;
+      }
+    });
+    const label = spans[best]?.textContent?.trim() ?? "";
+    if (label && label !== lastDayRef.current) {
+      lastDayRef.current = label;
+      setDayLabel(label);
+    }
+  });
+
   useEffect(() => {
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
@@ -59,7 +90,7 @@ export function FourthBentoAnimation({
   const handleMouseMove = (e: React.MouseEvent) => {
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      const adjustedX = e.clientX - rect.left + 100;
+      const adjustedX = e.clientX - rect.left;
       mouseX.set(adjustedX);
     }
   };
@@ -104,6 +135,7 @@ export function FourthBentoAnimation({
 
   return (
     <div
+      ref={rootRef}
       className="w-full h-full flex flex-col relative"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -176,7 +208,10 @@ export function FourthBentoAnimation({
       </div>
 
       {/* Days of the week */}
-      <div className="absolute top-4 left-0 right-0 flex justify-between max-w-md mx-auto px-8 text-sm text-gray-500">
+      <div
+        ref={daysRef}
+        className="absolute top-4 left-0 right-0 flex justify-between max-w-md mx-auto px-8 text-sm text-gray-500"
+      >
         <span>Tue</span>
         <span>Wed</span>
         <span>Thu</span>
@@ -214,7 +249,7 @@ export function FourthBentoAnimation({
           default: { duration: 0 }, // Makes position update instant
         }}
       >
-        <span className="text-white">12:00 AM</span>
+        <span className="text-white">{dayLabel}</span>
       </motion.div>
 
       <div

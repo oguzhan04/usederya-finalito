@@ -81,7 +81,7 @@ export const siteConfig = {
     badge: "Backed by Y Combinator",
     title: "How fast can AI move your freight?",
     description:
-      "Book freight for free",
+      "Request a quote for free",
     cta: {
       primary: {
         text: "Book Freight",

@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 import { NavMenu } from "@/components/nav-menu";
-import { ThemeToggle } from "@/components/theme-toggle";
+// import { ThemeToggle } from "@/components/theme-toggle";
 import { siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
@@ -133,7 +133,7 @@ export function Navbar() {
                   Book Freight
                 </Link>
               </div>
-              <ThemeToggle />
+              {/* <ThemeToggle /> */}
               <button
                 className="md:hidden border border-border size-8 rounded-md cursor-pointer flex items-center justify-center"
                 onClick={toggleDrawer}
