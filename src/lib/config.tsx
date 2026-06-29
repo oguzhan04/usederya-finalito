@@ -52,7 +52,7 @@ export const siteConfig = {
       { id: 1, name: "Home", href: "#hero" },
       { id: 2, name: "How it Works", href: "#bento" },
       { id: 3, name: "Features", href: "#features" },
-      { id: 4, name: "Pricing", href: "#pricing" },
+      { id: 4, name: "Booking", href: "#pricing" },
     ],
   },
   hero: {
@@ -81,11 +81,11 @@ export const siteConfig = {
     badge: "Backed by Y Combinator",
     title: "How fast can AI move your freight?",
     description:
-      "Derya Maritime Inc. official website.",
+      "Derya Maritime Inc.",
     cta: {
       primary: {
         text: "Book Freight",
-        href: "#",
+        href: "#pricing",
       },
       secondary: {
         text: "All Services",
