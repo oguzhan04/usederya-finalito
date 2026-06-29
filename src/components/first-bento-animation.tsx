@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { Icons } from "@/components/icons";
 import {
   Reasoning,
   ReasoningContent,
@@ -11,7 +10,11 @@ import { AnimatePresence, motion, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 export function ReasoningBasic() {
-  const reasoningText = `Based on your calendar patterns and preferences, I recommend scheduling the team meeting for Tuesday at 2pm. This time slot has historically had the highest attendance rate, and it avoids conflicts with other recurring meetings.`;
+  const reasoningText = `Received 87 quotes — only 13 included references. Buyers also asked about L/C vs B/L and payment terms. I've emailed the buyer the top quotes:
+
+1. Dominic S.S Hommes / End to End Global — USD 140/MT (350 MT/month, 7–15 day lead, FOB)
+2. Vanama Global Trading — USD 180/MT (1×40' FCL, South Africa, 15–19 days)
+3. Dyck Trading — EUR 190/MT (300 MT, Austria / FOB Linz, monthly possible)`;
 
   return (
     <Reasoning>
@@ -70,8 +73,8 @@ export function FirstBentoAnimation() {
             }}
           >
             <p className="text-sm">
-              Hey, I need help scheduling a team meeting that works well for
-              everyone. Any suggestions for finding an optimal time slot?
+              Update me on the last soybean supply + freight deal for
+              Hyzmetdashlar Turkmenistan.
             </p>
           </motion.div>
           <div className="flex items-center bg-background rounded-full w-fit border border-border flex-shrink-0">
@@ -83,8 +86,12 @@ export function FirstBentoAnimation() {
           </div>
         </div>
         <div className="flex items-start gap-2">
-          <div className="flex items-center bg-background rounded-full size-10 flex-shrink-0 justify-center shadow-[0_0_10px_rgba(0,0,0,0.05)] border border-border">
-            <Icons.logo className="size-4" />
+          <div className="flex items-center bg-secondary rounded-full size-10 flex-shrink-0 justify-center overflow-hidden shadow-[0_0_10px_rgba(0,0,0,0.05)]">
+            <img
+              src="/team/derya-mark-white.png"
+              alt="Derya"
+              className="size-full object-contain"
+            />
           </div>
 
           <div className="relative">

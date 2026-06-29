@@ -16,15 +16,15 @@ interface BoxConfig {
 
 const boxConfigs: BoxConfig[] = [
   {
-    title: "Bento grid",
+    title: "Air Booking RFQ for TVO",
     className: "bg-secondary text-white",
   },
   {
-    title: "Landing Page",
+    title: "DHL confirmation for TVO",
     className: "bg-secondary/40 text-white",
   },
   {
-    title: "Add Task",
+    title: "Ask TVO Financing + B/L",
     className:
       "bg-secondary/20 border border-secondary border-dashed text-secondary",
   },

@@ -15,13 +15,6 @@ export function QuoteSection() {
         </p>
 
         <div className="flex gap-4">
-          <div className="size-10 rounded-full bg-primary border border-border">
-            <img
-              src={quoteSection.author.image}
-              alt={quoteSection.author.name}
-              className="size-full rounded-full object-contain"
-            />
-          </div>
           <div className="text-left">
             <cite className="text-lg font-medium text-primary not-italic">
               {quoteSection.author.name}

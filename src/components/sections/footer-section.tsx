@@ -1,6 +1,6 @@
 "use client";
 
-import { Icons } from "@/components/icons";
+/* eslint-disable @next/next/no-img-element */
 import { FlickeringGrid } from "@/components/ui/flickering-grid";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { siteConfig } from "@/lib/config";
@@ -13,23 +13,19 @@ export function FooterSection() {
     <footer id="footer" className="w-full pb-0">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between p-10">
         <div className="flex flex-col items-start justify-start gap-y-5 max-w-xs mx-0">
-          <Link href="/" className="flex items-center gap-2">
-            <Icons.logo className="size-8" />
-            <p className="text-xl font-semibold text-primary">SkyAgent</p>
+          <Link
+            href="/"
+            className="flex items-center transition-opacity hover:opacity-80"
+          >
+            <img
+              src="/derya-logo.svg"
+              alt="Derya"
+              className="h-9 w-auto object-contain"
+            />
           </Link>
           <p className="tracking-tight text-muted-foreground font-medium">
             {siteConfig.hero.description}
           </p>
-          <div className="flex items-center gap-2 dark:hidden">
-            <Icons.soc2 className="size-12" />
-            <Icons.hipaa className="size-12" />
-            <Icons.gdpr className="size-12" />
-          </div>
-          <div className="dark:flex items-center gap-2 hidden">
-            <Icons.soc2Dark className="size-12" />
-            <Icons.hipaaDark className="size-12" />
-            <Icons.gdprDark className="size-12" />
-          </div>
         </div>
         <div className="pt-5 md:w-1/2">
           <div className="flex flex-col items-start justify-start md:flex-row md:items-center md:justify-between gap-y-5 lg:pl-10">
@@ -58,8 +54,8 @@ export function FooterSection() {
         <div className="absolute inset-0 bg-gradient-to-t from-transparent to-background z-10 from-40%" />
         <div className="absolute inset-0 mx-6">
           <FlickeringGrid
-            text={tablet ? "SkyAgent" : "Streamline your workflow"}
-            fontSize={tablet ? 70 : 90}
+            text="Ship with Derya"
+            fontSize={tablet ? 56 : 90}
             className="h-full w-full"
             squareSize={2}
             gridGap={tablet ? 2 : 3}

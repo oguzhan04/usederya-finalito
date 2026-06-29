@@ -1,6 +1,6 @@
 "use client";
 
-import { Icons } from "@/components/icons";
+/* eslint-disable @next/next/no-img-element */
 import { NavMenu } from "@/components/nav-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { siteConfig } from "@/lib/config";
@@ -111,9 +111,15 @@ export function Navbar() {
           )}
         >
           <div className="flex h-[56px] items-center justify-between p-4">
-            <Link href="/" className="flex items-center gap-3">
-              <Icons.logo className="size-7 md:size-10" />
-              <p className="text-lg font-semibold text-primary">SkyAgent</p>
+            <Link
+              href="#hero"
+              className="flex items-center cursor-pointer transition-opacity hover:opacity-80"
+            >
+              <img
+                src="/derya-logo.svg"
+                alt="Derya"
+                className="h-7 md:h-9 w-auto object-contain"
+              />
             </Link>
 
             <NavMenu />
@@ -124,7 +130,7 @@ export function Navbar() {
                   className="bg-secondary h-8 hidden md:flex items-center justify-center text-sm font-normal tracking-wide rounded-full text-primary-foreground dark:text-secondary-foreground w-fit px-4 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] border border-white/[0.12]"
                   href="#"
                 >
-                  Try for free
+                  Book Freight
                 </Link>
               </div>
               <ThemeToggle />
@@ -167,11 +173,15 @@ export function Navbar() {
               {/* Mobile menu content */}
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
-                  <Link href="/" className="flex items-center gap-3">
-                    <Icons.logo className="size-7 md:size-10" />
-                    <p className="text-lg font-semibold text-primary">
-                      SkyAgent
-                    </p>
+                  <Link
+              href="#hero"
+              className="flex items-center cursor-pointer transition-opacity hover:opacity-80"
+            >
+                    <img
+                      src="/derya-logo.svg"
+                      alt="Derya"
+                      className="h-8 w-auto object-contain"
+                    />
                   </Link>
                   <button
                     onClick={toggleDrawer}
@@ -221,7 +231,7 @@ export function Navbar() {
                     href="#"
                     className="bg-secondary h-8 flex items-center justify-center text-sm font-normal tracking-wide rounded-full text-primary-foreground dark:text-secondary-foreground w-full px-4 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] border border-white/[0.12] hover:bg-secondary/80 transition-all ease-out active:scale-95"
                   >
-                    Try for free
+                    Book Freight
                   </Link>
                 </div>
               </div>
