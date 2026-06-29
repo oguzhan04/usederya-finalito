@@ -136,6 +136,14 @@ export function PricingSection() {
         <p className="text-muted-foreground text-center text-balance font-medium">
           Send one freight request and Derya routes it straight to the quoting
           desk.
+          <br />
+          For any queries:{" "}
+          <a
+            href="mailto:contact@usederya.com"
+            className="text-secondary hover:underline"
+          >
+            contact@usederya.com
+          </a>
         </p>
       </SectionHeader>
 

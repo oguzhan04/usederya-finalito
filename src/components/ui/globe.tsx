@@ -58,8 +58,9 @@ export function Globe({
   className?: string;
   config?: COBEOptions;
 }) {
-  const { theme } = useTheme();
-  const isDarkMode = theme === "dark";
+  const { resolvedTheme, forcedTheme } = useTheme();
+  // forcedTheme wins when set (we force light); falls back to resolvedTheme otherwise
+  const isDarkMode = (forcedTheme ?? resolvedTheme) === "dark";
 
   const phiRef = useRef(0);
   const widthRef = useRef(0);
