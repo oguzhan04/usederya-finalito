@@ -216,7 +216,7 @@ export const siteConfig = {
   bentoSection: {
     title: "Derya managed over $3M",
     description:
-      "in freight and supply procurement transactions.",
+      "of freight and supply procurement transactions.",
     items: [
       {
         id: 1,
