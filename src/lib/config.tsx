@@ -81,7 +81,7 @@ export const siteConfig = {
     badge: "Backed by Y Combinator",
     title: "How fast can AI move your freight?",
     description:
-      "Try below, for free",
+      "Derya Maritime Inc. official website.",
     cta: {
       primary: {
         text: "Book Freight",
