@@ -50,6 +50,9 @@ const drawerMenuVariants = {
   visible: { opacity: 1 },
 };
 
+const getTargetId = (href: string) => href.split("#")[1] || href.replace("#", "");
+const getPageHref = (href: string) => (href.startsWith("#") ? `/${href}` : href);
+
 export function Navbar() {
   const { scrollY } = useScroll();
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -59,7 +62,7 @@ export function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       const sections = siteConfig.nav.links.map((item) =>
-        item.href.substring(1),
+        getTargetId(item.href),
       );
 
       for (const section of sections) {
@@ -112,7 +115,7 @@ export function Navbar() {
         >
           <div className="flex h-[56px] items-center justify-between p-4">
             <Link
-              href="#hero"
+              href="/#hero"
               className="flex items-center cursor-pointer transition-opacity hover:opacity-80"
             >
               <img
@@ -128,7 +131,7 @@ export function Navbar() {
               <div className="flex items-center space-x-6">
                 <Link
                   className="bg-secondary h-8 hidden md:flex items-center justify-center text-sm font-normal tracking-wide rounded-full text-primary-foreground dark:text-secondary-foreground w-fit px-4 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] border border-white/[0.12]"
-                  href="#pricing"
+                  href="/booking"
                 >
                   Book Freight
                 </Link>
@@ -174,7 +177,7 @@ export function Navbar() {
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <Link
-              href="#hero"
+              href="/#hero"
               className="flex items-center cursor-pointer transition-opacity hover:opacity-80"
             >
                     <img
@@ -203,17 +206,20 @@ export function Navbar() {
                         variants={drawerMenuVariants}
                       >
                         <a
-                          href={item.href}
+                          href={getPageHref(item.href)}
                           onClick={(e) => {
                             e.preventDefault();
-                            const element = document.getElementById(
-                              item.href.substring(1),
-                            );
-                            element?.scrollIntoView({ behavior: "smooth" });
+                            const targetId = getTargetId(item.href);
+                            const element = document.getElementById(targetId);
+                            if (element) {
+                              element.scrollIntoView({ behavior: "smooth" });
+                            } else {
+                              window.location.href = getPageHref(item.href);
+                            }
                             setIsDrawerOpen(false);
                           }}
                           className={`underline-offset-4 hover:text-primary/80 transition-colors ${
-                            activeSection === item.href.substring(1)
+                            activeSection === getTargetId(item.href)
                               ? "text-primary font-medium"
                               : "text-primary/60"
                           }`}
@@ -228,7 +234,7 @@ export function Navbar() {
                 {/* Action buttons */}
                 <div className="flex flex-col gap-2">
                   <Link
-                    href="#pricing"
+                    href="/booking"
                     className="bg-secondary h-8 flex items-center justify-center text-sm font-normal tracking-wide rounded-full text-primary-foreground dark:text-secondary-foreground w-full px-4 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] border border-white/[0.12] hover:bg-secondary/80 transition-all ease-out active:scale-95"
                   >
                     Book Freight

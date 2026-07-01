@@ -85,7 +85,7 @@ export const siteConfig = {
     cta: {
       primary: {
         text: "Book Freight",
-        href: "#pricing",
+        href: "/booking",
       },
       secondary: {
         text: "All Services",
@@ -244,7 +244,7 @@ export const siteConfig = {
         ),
         title: "For Freight Forwarders",
         description:
-          "Lead generation is what Derya is best at as of yet. Derya generates leads and sources deals for freight forwarding offices and offers financing options.",
+          "Lead generation is what Derya does best so far — we source deals and generate leads for freight forwarding offices, and back them with financing options.",
       },
       {
         id: 4,
@@ -278,7 +278,7 @@ export const siteConfig = {
     },
   ],
   growthSection: {
-    title: "Harnessing More Than 20+ Years of Experience",
+    title: "Harnessing More Than 20 Years of Experience",
     description:
       "We leverage AI to scale across our global partner network: tapping into their local expertise, established connections, and industry licenses to deliver results worldwide.",
     items: [

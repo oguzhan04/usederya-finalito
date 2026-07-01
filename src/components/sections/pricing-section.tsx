@@ -2,7 +2,7 @@
 
 import { SectionHeader } from "@/components/section-header";
 import { cn } from "@/lib/utils";
-import { CheckCircle2, FileLock2, MailCheck } from "lucide-react";
+import { CheckCircle2, Info } from "lucide-react";
 import {
   FormEvent,
   FocusEvent,
@@ -31,6 +31,64 @@ const containerTypes = [
 ];
 
 const quantities = ["1", "2", "3", "4", "5", "6", "7", "8", "9+"];
+
+const incoterms = [
+  {
+    code: "EXW",
+    label: "EXW - Ex Works",
+    info: "Buyer handles almost everything after pickup from seller.",
+  },
+  {
+    code: "FCA",
+    label: "FCA - Free Carrier",
+    info: "Seller hands goods to carrier; buyer handles main freight.",
+  },
+  {
+    code: "FAS",
+    label: "FAS - Free Alongside Ship",
+    info: "Seller places goods beside ship; buyer loads and ships.",
+  },
+  {
+    code: "FOB",
+    label: "FOB - Free On Board",
+    info: "Seller loads goods onto ship; buyer takes over onboard.",
+  },
+  {
+    code: "CFR",
+    label: "CFR - Cost and Freight",
+    info: "Seller pays ocean freight; buyer takes risk onboard.",
+  },
+  {
+    code: "CIF",
+    label: "CIF - Cost, Insurance and Freight",
+    info: "Seller pays ocean freight and basic insurance.",
+  },
+  {
+    code: "CPT",
+    label: "CPT - Carriage Paid To",
+    info: "Seller pays transport; buyer takes risk at first carrier.",
+  },
+  {
+    code: "CIP",
+    label: "CIP - Carriage and Insurance Paid To",
+    info: "Seller pays transport and insurance.",
+  },
+  {
+    code: "DAP",
+    label: "DAP - Delivered at Place",
+    info: "Seller delivers to destination; buyer handles import.",
+  },
+  {
+    code: "DPU",
+    label: "DPU - Delivered at Place Unloaded",
+    info: "Seller delivers and unloads; buyer handles import.",
+  },
+  {
+    code: "DDP",
+    label: "DDP - Delivered Duty Paid",
+    info: "Seller handles delivery, customs, duties, and taxes.",
+  },
+];
 
 function markTouched<T extends HTMLElement>(
   event: FocusEvent<T> | FormEvent<T>,
@@ -71,6 +129,8 @@ export function PricingSection() {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [customs, setCustoms] = useState("");
+  const [incoterm, setIncoterm] = useState("");
+  const [serviceNeeded, setServiceNeeded] = useState("");
   const [loadType, setLoadType] = useState<LoadType>("");
   const [dangerousGoods, setDangerousGoods] = useState(false);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
@@ -82,9 +142,51 @@ export function PricingSection() {
       routeUnlocked &&
       origin.trim().length > 0 &&
       destination.trim().length > 0 &&
-      customs.length > 0,
-    [routeUnlocked, origin, destination, customs],
+      customs.length > 0 &&
+      incoterm.length > 0 &&
+      serviceNeeded.length > 0,
+    [routeUnlocked, origin, destination, customs, incoterm, serviceNeeded],
   );
+
+  const routeFields = useMemo(() => {
+    switch (serviceNeeded) {
+      case "Port to port":
+        return {
+          originLabel: "Origin port",
+          originPlaceholder: "Origin port",
+          destinationLabel: "Destination port",
+          destinationPlaceholder: "Destination port",
+        };
+      case "Door to port":
+        return {
+          originLabel: "Pickup address",
+          originPlaceholder: "Pickup address",
+          destinationLabel: "Destination port",
+          destinationPlaceholder: "Destination port",
+        };
+      case "Port to door":
+        return {
+          originLabel: "Origin port",
+          originPlaceholder: "Origin port",
+          destinationLabel: "Delivery address",
+          destinationPlaceholder: "Delivery address",
+        };
+      case "Door to door":
+        return {
+          originLabel: "Pickup address",
+          originPlaceholder: "Pickup address",
+          destinationLabel: "Delivery address",
+          destinationPlaceholder: "Delivery address",
+        };
+      default:
+        return {
+          originLabel: "Origin",
+          originPlaceholder: "Origin",
+          destinationLabel: "Destination",
+          destinationPlaceholder: "Destination",
+        };
+    }
+  }, [serviceNeeded]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -131,7 +233,7 @@ export function PricingSection() {
     >
       <SectionHeader>
         <h2 className="text-3xl md:text-4xl font-medium tracking-tighter text-center text-balance">
-          Request a quote from AI — free
+          Request a quote from — free
         </h2>
         <p className="text-muted-foreground text-center text-balance font-medium">
           Send one freight request and Derya routes it straight to the quoting
@@ -193,8 +295,35 @@ export function PricingSection() {
                       name="Company name"
                       autoComplete="organization"
                       placeholder="Company name"
+                      onBlur={markTouched}
+                      onInvalid={markTouched}
                     />
                   </Field>
+                  <div className="grid gap-2 text-sm font-medium text-primary">
+                    <span>Phone number (optional)</span>
+                    <div className="grid grid-cols-[72px_minmax(0,1fr)] gap-2">
+                      <input
+                        className={cn(inputClass, "px-2 text-center")}
+                        type="tel"
+                        name="Phone code"
+                        defaultValue="+"
+                        inputMode="tel"
+                        autoComplete="tel-country-code"
+                        aria-label="Phone country code"
+                        onBlur={markTouched}
+                        onInvalid={markTouched}
+                      />
+                      <input
+                        className={inputClass}
+                        type="tel"
+                        name="Phone number"
+                        autoComplete="tel-national"
+                        placeholder="Phone number"
+                        onBlur={markTouched}
+                        onInvalid={markTouched}
+                      />
+                    </div>
+                  </div>
                 </div>
               </fieldset>
 
@@ -205,35 +334,99 @@ export function PricingSection() {
                   !routeUnlocked && "is-locked opacity-45",
                 )}
               >
-                <StepLegend number="2" title="Route" />
-                <div className="grid gap-4 md:grid-cols-2">
-                  <Field label="Origin">
-                    <input
-                      className={inputClass}
-                      type="text"
-                      name="Origin"
+                <StepLegend number="2" title="Route & Service" />
+                <div className="grid gap-4">
+                  <label className="grid gap-2 text-sm font-medium text-primary">
+                    <span>What service do you need?</span>
+                    <select
+                      className={selectClass}
+                      name="Service needed"
                       required
-                      placeholder="Origin"
-                      value={origin}
-                      onChange={(event) => setOrigin(event.target.value)}
+                      value={serviceNeeded}
+                      onChange={(event) => setServiceNeeded(event.target.value)}
                       onBlur={markTouched}
                       onInvalid={markTouched}
-                    />
-                  </Field>
-                  <Field label="Destination">
-                    <input
-                      className={inputClass}
-                      type="text"
-                      name="Destination"
+                    >
+                      <option value="" disabled>
+                        What service do you need?
+                      </option>
+                      <option value="Port to port">Port to port</option>
+                      <option value="Door to port">Door to port</option>
+                      <option value="Port to door">Port to door</option>
+                      <option value="Door to door">Door to door</option>
+                    </select>
+                  </label>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <Field label={routeFields.originLabel}>
+                      <input
+                        className={inputClass}
+                        type="text"
+                        name="Origin"
+                        required
+                        placeholder={routeFields.originPlaceholder}
+                        value={origin}
+                        onChange={(event) => setOrigin(event.target.value)}
+                        onBlur={markTouched}
+                        onInvalid={markTouched}
+                      />
+                    </Field>
+                    <Field label={routeFields.destinationLabel}>
+                      <input
+                        className={inputClass}
+                        type="text"
+                        name="Destination"
+                        required
+                        placeholder={routeFields.destinationPlaceholder}
+                        value={destination}
+                        onChange={(event) => setDestination(event.target.value)}
+                        onBlur={markTouched}
+                        onInvalid={markTouched}
+                      />
+                    </Field>
+                  </div>
+                  <label className="grid gap-2 text-sm font-medium text-primary">
+                    <span className="flex items-center gap-2">
+                      Incoterms
+                      <span className="group relative inline-flex">
+                        <button
+                          type="button"
+                          className="flex size-5 items-center justify-center rounded-full border border-secondary/30 bg-secondary/10 text-secondary"
+                          aria-label="Show Incoterms guidance"
+                        >
+                          <Info className="size-3.5" />
+                        </button>
+                        <span className="pointer-events-none absolute left-1/2 top-7 z-30 hidden w-[min(22rem,80vw)] -translate-x-1/2 rounded-md border border-border bg-white p-3 text-xs font-normal leading-relaxed text-muted-foreground shadow-xl group-hover:block">
+                          {incoterms.map((term) => (
+                            <span key={term.code} className="block">
+                              <strong className="text-primary">
+                                {term.code}
+                              </strong>{" "}
+                              - {term.info}
+                            </span>
+                          ))}
+                        </span>
+                      </span>
+                    </span>
+                    <select
+                      className={selectClass}
+                      name="Incoterms"
                       required
-                      placeholder="Destination"
-                      value={destination}
-                      onChange={(event) => setDestination(event.target.value)}
+                      value={incoterm}
+                      onChange={(event) => setIncoterm(event.target.value)}
                       onBlur={markTouched}
                       onInvalid={markTouched}
-                    />
-                  </Field>
-                  <label className="grid gap-2 text-sm font-medium text-primary md:col-span-2">
+                    >
+                      <option value="" disabled>
+                        Select Incoterms
+                      </option>
+                      {incoterms.map((term) => (
+                        <option key={term.code} value={term.code}>
+                          {term.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="grid gap-2 text-sm font-medium text-primary">
                     <span>Who handles customs clearance?</span>
                     <select
                       className={selectClass}
@@ -258,6 +451,11 @@ export function PricingSection() {
                       <option value="unsure">Not sure — advise me</option>
                     </select>
                   </label>
+                  {serviceNeeded && serviceNeeded !== "Port to port" && (
+                    <p className="rounded-md border border-secondary/20 bg-secondary/5 px-3 py-2 text-xs font-medium leading-relaxed text-muted-foreground">
+                      NOTE: Detailed open address is essential for quick quoting.
+                    </p>
+                  )}
                 </div>
               </fieldset>
 
@@ -442,14 +640,6 @@ export function PricingSection() {
             <div className="border-t border-border bg-[#F3F4F6] p-5 md:p-6">
               <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
                 <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-3 md:flex md:gap-5">
-                  <span className="flex items-center gap-2">
-                    <MailCheck className="size-4 text-secondary" />
-                    RFQ lands in the Derya inbox
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <FileLock2 className="size-4 text-secondary" />
-                    MSDS files stay confidential
-                  </span>
                   <span className="flex items-center gap-2">
                     <CheckCircle2 className="size-4 text-secondary" />
                     Required fields unlock step by step

@@ -11,6 +11,9 @@ interface NavItem {
 
 const navs: NavItem[] = siteConfig.nav.links;
 
+const getTargetId = (href: string) => href.split("#")[1] || href.replace("#", "");
+const getPageHref = (href: string) => (href.startsWith("#") ? `/${href}` : href);
+
 export function NavMenu() {
   const ref = useRef<HTMLUListElement>(null);
   const [left, setLeft] = useState(0);
@@ -22,7 +25,7 @@ export function NavMenu() {
   React.useEffect(() => {
     // Initialize with first nav item
     const firstItem = ref.current?.querySelector(
-      `[href="#${navs[0].href.substring(1)}"]`,
+      `[data-nav-target="${getTargetId(navs[0].href)}"]`,
     )?.parentElement;
     if (firstItem) {
       const rect = firstItem.getBoundingClientRect();
@@ -37,7 +40,7 @@ export function NavMenu() {
       // Skip scroll handling during manual click scrolling
       if (isManualScroll) return;
 
-      const sections = navs.map((item) => item.href.substring(1));
+      const sections = navs.map((item) => getTargetId(item.href));
 
       // Find the section closest to viewport top
       let closestSection = sections[0];
@@ -58,7 +61,7 @@ export function NavMenu() {
       // Update active section and nav indicator
       setActiveSection(closestSection);
       const navItem = ref.current?.querySelector(
-        `[href="#${closestSection}"]`,
+        `[data-nav-target="${closestSection}"]`,
       )?.parentElement;
       if (navItem) {
         const rect = navItem.getBoundingClientRect();
@@ -78,7 +81,7 @@ export function NavMenu() {
   ) => {
     e.preventDefault();
 
-    const targetId = item.href.substring(1);
+    const targetId = getTargetId(item.href);
     const element = document.getElementById(targetId);
 
     if (element) {
@@ -108,6 +111,8 @@ export function NavMenu() {
       setTimeout(() => {
         setIsManualScroll(false);
       }, 500); // Adjust timing to match scroll animation duration
+    } else {
+      window.location.href = getPageHref(item.href);
     }
   };
 
@@ -121,12 +126,16 @@ export function NavMenu() {
           <li
             key={item.name}
             className={`z-10 cursor-pointer h-full flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-              activeSection === item.href.substring(1)
+              activeSection === getTargetId(item.href)
                 ? "text-primary"
                 : "text-primary/60 hover:text-primary"
             } tracking-tight`}
           >
-            <a href={item.href} onClick={(e) => handleClick(e, item)}>
+            <a
+              href={getPageHref(item.href)}
+              data-nav-target={getTargetId(item.href)}
+              onClick={(e) => handleClick(e, item)}
+            >
               {item.name}
             </a>
           </li>

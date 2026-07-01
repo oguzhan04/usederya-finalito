@@ -40,9 +40,14 @@ export async function POST(request: Request) {
   }
 
   const email = getText(formData, "Email");
+  const companyName = getText(formData, "Company name");
+  const phoneCode = getText(formData, "Phone code");
+  const phoneNumber = getText(formData, "Phone number");
   const origin = getText(formData, "Origin");
   const destination = getText(formData, "Destination");
+  const serviceNeeded = getText(formData, "Service needed");
   const customs = getText(formData, "Customs handling");
+  const incoterms = getText(formData, "Incoterms");
   const loadType = getText(formData, "Load type");
   const containerType = getText(formData, "Container type");
   const containerQuantity = getText(formData, "Container quantity");
@@ -54,9 +59,11 @@ export async function POST(request: Request) {
 
   const missing: string[] = [];
   if (!email || !email.includes("@")) missing.push("Email");
+  if (!serviceNeeded) missing.push("Service needed");
   if (!origin) missing.push("Origin");
   if (!destination) missing.push("Destination");
   if (!customs) missing.push("Customs handling");
+  if (!incoterms) missing.push("Incoterms");
   if (!loadType) missing.push("Load type");
   if (!totalWeight) missing.push("Total weight");
   if (loadType === "FCL" && !containerType) missing.push("Container type");
@@ -99,9 +106,13 @@ export async function POST(request: Request) {
 
   const rows: Array<[string, string]> = [
     ["Email", email],
+    ["Company name", companyName],
+    ["Phone", phoneNumber ? `${phoneCode} ${phoneNumber}`.trim() : ""],
+    ["Service needed", serviceNeeded],
     ["Origin", origin],
     ["Destination", destination],
     ["Customs handling", customs],
+    ["Incoterms", incoterms],
     ["Load type", loadType],
     ["Container type", loadType === "FCL" ? containerType : ""],
     ["Container quantity", loadType === "FCL" ? containerQuantity : ""],
