@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function BookingPage() {
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-start pt-10">
-      <PricingSection />
+    <main className="flex min-h-screen w-full flex-col items-center justify-start pt-2">
+      <PricingSection title="Request a quote for free" compactHeader />
     </main>
   );
 }

@@ -124,7 +124,13 @@ function Field({
   );
 }
 
-export function PricingSection() {
+export function PricingSection({
+  title = "Request a quote from — free",
+  compactHeader = false,
+}: {
+  title?: string;
+  compactHeader?: boolean;
+}) {
   const [email, setEmail] = useState("");
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
@@ -229,11 +235,19 @@ export function PricingSection() {
   return (
     <section
       id="pricing"
-      className="flex flex-col items-center justify-center gap-10 pb-10 w-full relative"
+      className={cn(
+        "flex w-full flex-col items-center justify-center pb-10 relative",
+        compactHeader ? "gap-6" : "gap-10",
+      )}
     >
-      <SectionHeader>
-        <h2 className="text-3xl md:text-4xl font-medium tracking-tighter text-center text-balance">
-          Request a quote from — free
+      <SectionHeader className={compactHeader ? "p-5 md:p-8" : undefined}>
+        <h2
+          className={cn(
+            "font-medium tracking-tighter text-center text-balance",
+            compactHeader ? "text-2xl md:text-3xl" : "text-3xl md:text-4xl",
+          )}
+        >
+          {title}
         </h2>
         <p className="text-muted-foreground text-center text-balance font-medium">
           Send one freight request and Derya routes it straight to the quoting
@@ -356,7 +370,7 @@ export function PricingSection() {
                       <option value="Door to door">Door to door</option>
                     </select>
                   </label>
-                  <div className="grid gap-4 md:grid-cols-2">
+                  <div className="grid gap-4">
                     <Field label={routeFields.originLabel}>
                       <input
                         className={inputClass}
@@ -494,9 +508,14 @@ export function PricingSection() {
                             onInvalid={markTouched}
                             className="sr-only"
                           />
-                          {type === "FCL"
-                            ? "FCL - Full container"
-                            : "LCL - Less than container"}
+                          <span className="flex flex-col items-center justify-center leading-tight">
+                            <span>{type}</span>
+                            <span className="text-xs font-normal">
+                              {type === "FCL"
+                                ? "(Full Container)"
+                                : "(Less Than Container)"}
+                            </span>
+                          </span>
                         </label>
                       ))}
                     </div>
