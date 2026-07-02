@@ -132,6 +132,7 @@ export function PricingSection({
   compactHeader?: boolean;
 }) {
   const [email, setEmail] = useState("");
+  const [phoneCodeDigits, setPhoneCodeDigits] = useState("");
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [customs, setCustoms] = useState("");
@@ -315,18 +316,34 @@ export function PricingSection({
                   </Field>
                   <div className="grid gap-2 text-sm font-medium text-primary">
                     <span>Phone number (optional)</span>
-                    <div className="grid grid-cols-[72px_minmax(0,1fr)] gap-2">
-                      <input
-                        className={cn(inputClass, "px-2 text-center")}
-                        type="tel"
-                        name="Phone code"
-                        defaultValue="+"
-                        inputMode="tel"
-                        autoComplete="tel-country-code"
-                        aria-label="Phone country code"
-                        onBlur={markTouched}
-                        onInvalid={markTouched}
-                      />
+                    <div className="grid grid-cols-[82px_minmax(0,1fr)] gap-2">
+                      <div className="relative">
+                        <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm font-medium text-primary">
+                          +
+                        </span>
+                        <input
+                          type="hidden"
+                          name="Phone code"
+                          value={phoneCodeDigits ? `+${phoneCodeDigits}` : ""}
+                        />
+                        <input
+                          className={cn(inputClass, "pl-7 pr-2 text-left")}
+                          type="tel"
+                          value={phoneCodeDigits}
+                          inputMode="numeric"
+                          autoComplete="tel-country-code"
+                          aria-label="Phone country code"
+                          placeholder="___"
+                          maxLength={3}
+                          onChange={(event) =>
+                            setPhoneCodeDigits(
+                              event.target.value.replace(/\D/g, "").slice(0, 3),
+                            )
+                          }
+                          onBlur={markTouched}
+                          onInvalid={markTouched}
+                        />
+                      </div>
                       <input
                         className={inputClass}
                         type="tel"
@@ -585,6 +602,16 @@ export function PricingSection({
                     <span className="text-xs font-normal text-muted-foreground">
                       e.g. 12,000 kg
                     </span>
+                  </Field>
+
+                  <Field label="Cargo ready date (optional)">
+                    <input
+                      className={inputClass}
+                      type="date"
+                      name="Cargo ready date"
+                      onBlur={markTouched}
+                      onInvalid={markTouched}
+                    />
                   </Field>
 
                   <div hidden={loadType !== "LCL"}>

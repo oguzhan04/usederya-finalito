@@ -52,6 +52,7 @@ export async function POST(request: Request) {
   const containerType = getText(formData, "Container type");
   const containerQuantity = getText(formData, "Container quantity");
   const totalWeight = getText(formData, "Total weight");
+  const cargoReadyDate = getText(formData, "Cargo ready date");
   const dimensions = getText(formData, "Dimensions");
   const notes = getText(formData, "Notes");
   const dangerousGoods = boolText(formData, "Dangerous goods");
@@ -117,6 +118,7 @@ export async function POST(request: Request) {
     ["Container type", loadType === "FCL" ? containerType : ""],
     ["Container quantity", loadType === "FCL" ? containerQuantity : ""],
     ["Total weight", totalWeight],
+    ["Cargo ready date", cargoReadyDate],
     ["Dimensions", loadType === "LCL" ? dimensions : ""],
     ["Dangerous goods", dangerousGoods],
     ["Declare MSDS later", declareMsdsLater],

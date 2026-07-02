@@ -88,8 +88,8 @@ export const siteConfig = {
         href: "/booking",
       },
       secondary: {
-        text: "All Services",
-        href: "#bento",
+        text: "Join Our Network (Forwarders/Carriers)",
+        href: "/join",
       },
     },
   },
