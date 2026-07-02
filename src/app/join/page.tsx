@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-const onboardingCalendarUrl = "https://calendar.google.com/";
+const onboardingCalendarUrl = "https://calendar.app.google/QiVA25fvmMprJjRN8";
 
 export const metadata: Metadata = {
   title: "Join the Network",
