@@ -32,6 +32,24 @@ const formatRows = (rows: Array<[string, string]>) =>
     )
     .join("");
 
+async function appendQuoteToSheet(rows: Array<[string, string]>) {
+  const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+
+  if (!webhookUrl) return;
+
+  const response = await fetch(webhookUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(Object.fromEntries(rows)),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Google Sheets webhook returned ${response.status}`);
+  }
+}
+
 export async function POST(request: Request) {
   const formData = await request.formData();
 
@@ -158,6 +176,12 @@ export async function POST(request: Request) {
     html,
     attachments,
   });
+
+  try {
+    await appendQuoteToSheet(rows);
+  } catch (error) {
+    console.error("Could not append quote to Google Sheets:", error);
+  }
 
   return NextResponse.json({ ok: true });
 }
