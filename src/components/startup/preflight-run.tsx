@@ -107,7 +107,7 @@ export function PreflightRun({ result, revealed, ready, onView }: PreflightRunPr
               </span>
               <p className="text-base font-medium text-secondary">
                 Verdict ready
-                {result.engine === "live" ? " — checked against live sources" : ""}
+                {result.engine === "live" ? ", checked against live sources" : ""}
               </p>
             </div>
             <button

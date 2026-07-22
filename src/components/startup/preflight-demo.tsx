@@ -26,7 +26,7 @@ export function PreflightDemo() {
   async function run() {
     const myRun = ++runIdRef.current;
 
-    // Results are precomputed from hand-checked facts — instant, no network.
+    // Results are precomputed from hand-checked facts: instant, no network.
     const nextResult = analyzeShipment(selected.facts, "local");
 
     setResult(nextResult);

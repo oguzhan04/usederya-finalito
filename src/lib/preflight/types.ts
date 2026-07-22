@@ -67,7 +67,7 @@ export interface TimelineStep {
 
 export interface PreflightResult {
   verdict: Verdict;
-  /** e.g. "NO-GO — as specced." / "GO — with 3 conditions." */
+  /** e.g. "NO-GO as specced." / "GO, with 3 conditions." */
   headline: string;
   summary: string;
   findings: Finding[];

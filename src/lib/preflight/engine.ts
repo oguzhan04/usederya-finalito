@@ -75,7 +75,7 @@ function checkHazmat(ctx: RuleContext) {
     } else if (facts.mode === "ocean") {
       findings.push({
         kind: "blocker",
-        title: "Class 9 dangerous goods — line approval needed",
+        title: "Class 9 dangerous goods: line approval needed",
         detail:
           "Lithium-ion batteries (UN3480, Class 9) need a dangerous-goods declaration filed and approved by the carrier before booking is confirmed. Not every vessel or service string accepts them.",
         citationIds: ["ecfr-172-101", "imdg-class9"],
@@ -84,13 +84,13 @@ function checkHazmat(ctx: RuleContext) {
         kind: "action",
         title: "File the DG package early",
         detail:
-          "MSDS, UN38.3 test summary and the IMDG declaration go to the line with the booking request — approval usually takes 2–4 business days.",
+          "MSDS, UN38.3 test summary and the IMDG declaration go to the line with the booking request; approval usually takes 2-4 business days.",
         citationIds: ["imdg-class9", "derya-desk"],
       });
     } else {
       findings.push({
         kind: "blocker",
-        title: "Hazmat load — not every carrier can touch it",
+        title: "Hazmat load: not every carrier can touch it",
         detail:
           "Lithium-ion batteries (UN3480) are Class 9 dangerous goods on the road: the carrier needs hazmat registration, the load needs shipping papers, Class 9 labels and UN38.3 test documentation.",
         citationIds: ["ecfr-172-101", "ecfr-173-185"],
@@ -120,7 +120,7 @@ function checkHazmat(ctx: RuleContext) {
       kind: "blocker",
       title: "Booking confirms only after DG approval (UN3171)",
       detail:
-        "E-bikes ship as battery-powered vehicles, UN3171 Class 9. The line must approve an IMDG dangerous-goods declaration before the booking confirms, and not every service string accepts them — build 2–4 extra days into the booking window.",
+        "E-bikes ship as battery-powered vehicles, UN3171 Class 9. The line must approve an IMDG dangerous-goods declaration before the booking confirms, and not every service string accepts them; build 2-4 extra days into the booking window.",
       citationIds: ["ecfr-172-101", "imdg-class9"],
     });
     findings.push({
@@ -135,7 +135,7 @@ function checkHazmat(ctx: RuleContext) {
   if (!un && facts.mentionsHazmat) {
     findings.push({
       kind: "blocker",
-      title: "Dangerous goods flagged — classification needed",
+      title: "Dangerous goods flagged: classification needed",
       detail:
         "You flagged hazmat but we couldn't pin the UN number from the description. The proper shipping name, class and packing group from the MSDS decide which carriers and modes are legal.",
       citationIds: ["ecfr-172-101"],
@@ -164,7 +164,7 @@ function checkCustoms(ctx: RuleContext) {
       detail:
         `${commodity.name} classify under HTS ${commodity.hts} at ${base}% general duty` +
         (s301 > 0
-          ? `, plus ${s301}% Section 301 additional duty on China-origin goods — ${totalPct}% before any other actions`
+          ? `, plus ${s301}% Section 301 additional duty on China-origin goods, ${totalPct}% total before any other actions`
           : "") +
         (dutyAmount !== null
           ? `. On your declared ${usd(value!)} that is ≈ ${usd(dutyAmount)} at entry.`
@@ -181,7 +181,7 @@ function checkCustoms(ctx: RuleContext) {
         kind: "action",
         title: "Verify the current duty stack before booking",
         detail:
-          "Section 301 rates are only part of the stack — IEEPA and reciprocal actions have changed China duty totals repeatedly since 2025, by CSMS notice. We re-verify the full stack against CBP on the day we file the entry.",
+          "Section 301 rates are only part of the stack: IEEPA and reciprocal actions have changed China duty totals repeatedly since 2025, by CSMS notice. We re-verify the full stack against CBP on the day we file the entry.",
         citationIds: ["cbp-trade-remedies", "ustr-301"],
       });
     }
@@ -207,7 +207,7 @@ function checkCustoms(ctx: RuleContext) {
       kind: "action",
       title: "Assemble the traceability file now",
       detail:
-        "Purchase orders, production records and raw-material origin docs, plus a screen of every supplier against the DHS UFLPA Entity List — before the container sails, not after CBP asks.",
+        "Purchase orders, production records and raw-material origin docs, plus a screen of every supplier against the DHS UFLPA Entity List. Before the container sails, not after CBP asks.",
       citationIds: ["dhs-uflpa-entity", "cbp-uflpa"],
     });
   }
@@ -240,7 +240,7 @@ function checkFoodHandling(ctx: RuleContext) {
     kind: "action",
     title: "Food-grade equipment only",
     detail:
-      "We assign a food-grade dry van with a washout record and no prior chemical or waste loads — the carrier's authority and inspection history are checked on FMCSA SAFER before dispatch.",
+      "We assign a food-grade dry van with a washout record and no prior chemical or waste loads. The carrier's authority and inspection history are checked on FMCSA SAFER before dispatch.",
     citationIds: ["fmcsa-safer", "derya-desk"],
   });
 }
@@ -257,7 +257,7 @@ function checkInsurance(ctx: RuleContext) {
       kind: "action",
       title: "Add the cargo value",
       detail:
-        "With a declared value we can quote all-risk cargo cover and check it against carrier liability — the gap is usually bigger than shippers expect.",
+        "With a declared value we can quote all-risk cargo cover and check it against carrier liability. The gap is usually bigger than shippers expect.",
       citationIds: ["usc-14706"],
     });
     return;
@@ -277,7 +277,7 @@ function checkInsurance(ctx: RuleContext) {
     findings.push({
       kind: "action",
       title: "Bind all-risk cargo cover",
-      detail: `A shipper's-interest all-risk policy for the full ${usd(value)} binds in about a day — we arrange it with the booking.`,
+      detail: `A shipper's-interest all-risk policy for the full ${usd(value)} binds in about a day; we arrange it with the booking.`,
       citationIds: ["derya-desk"],
     });
   } else if (crossBorder && value > 0) {
@@ -285,7 +285,7 @@ function checkInsurance(ctx: RuleContext) {
       kind: "action",
       title: "Insure to CIF + 10%",
       detail:
-        `Ocean and air legs carry their own liability limits well below cargo value. Standard practice is all-risk marine cover at CIF value plus 10% — on ${usd(value)} declared, insure ≈ ${usd(value * 1.1)}.`,
+        `Ocean and air legs carry their own liability limits well below cargo value. Standard practice is all-risk marine cover at CIF value plus 10%. On ${usd(value)} declared, insure ≈ ${usd(value * 1.1)}.`,
       citationIds: ["your-input", "derya-desk"],
     });
   }
@@ -322,8 +322,8 @@ function checkTheft(ctx: RuleContext) {
     kind: "action",
     title: weekend ? "Kill the weekend dwell" : "Run it covered",
     detail: weekend
-      ? "Either move pickup to Monday morning or run a team straight through — plus high-security seals and a covert tracker on the pallets. We don't let a load like this sit in a yard from Friday to Monday."
-      : "High-security seals, covert tracking and no unattended overnight parking in the first 200 miles — the window where most thefts happen.",
+      ? "Either move pickup to Monday morning or run a team straight through, plus high-security seals and a covert tracker on the pallets. We don't let a load like this sit in a yard from Friday to Monday."
+      : "High-security seals, covert tracking and no unattended overnight parking in the first 200 miles, the window where most thefts happen.",
     citationIds: ["cargonet-2024", "derya-desk"],
   });
 }
@@ -359,9 +359,9 @@ function checkTransit(ctx: RuleContext) {
     const window = lane ? (WEST_COAST.has(destState) ? lane.west : lane.east) : null;
     if (window) {
       ctx.transit = {
-        headline: `≈ ${window[0]}–${window[1]} days port to port`,
+        headline: `≈ ${window[0]}-${window[1]} days port to port`,
         detail:
-          `${origin.name} → ${dest.name} runs ${window[0]}–${window[1]} days on the water, plus ~5–10 days for booking cutoff and origin handling up front and 3–7 days for discharge, customs release and drayage at destination. Work backwards from your deadline with the full window, not the sailing time.`,
+          `${origin.name} → ${dest.name} runs ${window[0]}-${window[1]} days on the water, plus ~5-10 days for booking cutoff and origin handling up front and 3-7 days for discharge, customs release and drayage at destination. Work backwards from your deadline with the full window, not the sailing time.`,
         citationIds: ["derya-desk", "your-input"],
       };
     } else {
@@ -373,9 +373,9 @@ function checkTransit(ctx: RuleContext) {
     }
   } else if (facts.mode === "air") {
     ctx.transit = {
-      headline: "≈ 1–3 days airport to airport",
+      headline: "≈ 1-3 days airport to airport",
       detail:
-        `${origin.name} → ${dest.name} by air is 1–3 days airport-to-airport once space is confirmed; add screening and, for dangerous goods, DG acceptance checks at origin.`,
+        `${origin.name} → ${dest.name} by air is 1-3 days airport-to-airport once space is confirmed; add screening and, for dangerous goods, DG acceptance checks at origin.`,
       citationIds: ["derya-desk"],
     };
   }
@@ -389,16 +389,16 @@ function decideVerdict(findings: Finding[]): Verdict {
 }
 
 function buildHeadline(verdict: Verdict, findings: Finding[]): string {
-  if (verdict === "NO_GO") return "NO-GO — as specced.";
+  if (verdict === "NO_GO") return "NO-GO as specced.";
   if (verdict === "CONDITIONAL") {
     const conditions = findings.filter((f) => f.kind === "blocker").length;
-    return `GO — with ${conditions} condition${conditions > 1 ? "s" : ""}.`;
+    return `GO, with ${conditions} condition${conditions > 1 ? "s" : ""}.`;
   }
   const risks = findings.filter((f) => f.kind === "risk").length;
-  if (risks > 0) return "GO — watch the flags.";
+  if (risks > 0) return "GO. Watch the flags.";
   return findings.some((f) => f.kind === "action")
-    ? "GO — housekeeping only."
-    : "GO — clean load.";
+    ? "GO. Housekeeping only."
+    : "GO. Clean load.";
 }
 
 function buildSummary(ctx: RuleContext, verdict: Verdict): string {
@@ -423,21 +423,21 @@ function buildSummary(ctx: RuleContext, verdict: Verdict): string {
   const risks = ctx.findings.filter((f) => f.kind === "risk");
 
   if (verdict === "NO_GO") {
-    return `${cap(what)}${lane} can't move legally as specced — ${blockers.find((b) => b.hard)?.title.toLowerCase() ?? "a hard blocker stands in the way"}. There is a clean path around it; the actions below are the re-spec.`;
+    return `${cap(what)}${lane} can't move legally as specced: ${blockers.find((b) => b.hard)?.title.toLowerCase() ?? "a hard blocker stands in the way"}. There is a clean path around it; the actions below are the re-spec.`;
   }
   if (verdict === "CONDITIONAL") {
-    return `${cap(what)}${lane} can ship — after ${blockers.length === 1 ? "one condition closes" : `${blockers.length} conditions close`} out${risks.length ? `, with ${risks.length} live risk${risks.length > 1 ? "s" : ""} priced in` : ""}. Every figure below is cited to the public record it comes from.`;
+    return `${cap(what)}${lane} can ship once ${blockers.length === 1 ? "one condition closes" : `${blockers.length} conditions close`} out${risks.length ? `, with ${risks.length} live risk${risks.length > 1 ? "s" : ""} priced in` : ""}. Every figure below is cited to the public record it comes from.`;
   }
   if (risks.length) {
-    return `Green light for ${what}${lane}. ${risks.length === 1 ? "One flag" : `${risks.length} flags`} worth pricing in before you book — each cited below.`;
+    return `Green light for ${what}${lane}. ${risks.length === 1 ? "One flag" : `${risks.length} flags`} worth pricing in before you book, each cited below.`;
   }
   const actions = ctx.findings.filter((f) => f.kind === "action");
   if (actions.length) {
     return actions.length === 1
-      ? `Green light for ${what}${lane} — nothing blocks it. One housekeeping item below keeps it clean, cited.`
-      : `Green light for ${what}${lane} — nothing blocks it. ${actions.length} housekeeping items below keep it clean, each cited.`;
+      ? `Green light for ${what}${lane}. Nothing blocks it; one housekeeping item below keeps it clean, cited.`
+      : `Green light for ${what}${lane}. Nothing blocks it; ${actions.length} housekeeping items below keep it clean, each cited.`;
   }
-  return `Green light for ${what}${lane} — no hazmat, no tariff exposure, no insurance gap on what you've told us. The math is below, with sources.`;
+  return `Green light for ${what}${lane}: no hazmat, no tariff exposure, no insurance gap on what you've told us. The math is below, with sources.`;
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -479,15 +479,15 @@ function refuseProhibited(facts: ShipmentFacts, engine: "live" | "local"): Prefl
       hard: true,
       title: "Prohibited cargo or evasive routing",
       detail:
-        "U.S. law bars moving prohibited merchandise or introducing goods contrary to law, and carriers, forwarders and brokers are required to refuse it — the liability extends to everyone who touches the load. Licensed-but-controlled goods (pharmaceuticals, firearms) move only through a compliance desk with permits on file, not a public demo.",
+        "U.S. law bars moving prohibited merchandise or introducing goods contrary to law, and carriers, forwarders and brokers are required to refuse it; the liability extends to everyone who touches the load. Licensed-but-controlled goods (pharmaceuticals, firearms) move only through a compliance desk with permits on file, not a public demo.",
       citationIds: ["cbp-prohibited", "usc-1595a"],
     },
   ];
   return {
     verdict: "NO_GO",
-    headline: "NO-GO — full stop.",
+    headline: "NO-GO. Full stop.",
     summary:
-      "This isn't a lane we'll pre-flight. Derya moves legal, declarable freight — prohibited cargo and customs-evasion routings have no re-spec. If we've misread a legitimate load, rephrase it (e.g. “pharmaceuticals”, “licensed sporting goods”) and run it again.",
+      "This isn't a lane we'll pre-flight. Derya moves legal, declarable freight, and prohibited cargo or customs-evasion routings have no re-spec. If we've misread a legitimate load, rephrase it (e.g. “pharmaceuticals”, “licensed sporting goods”) and run it again.",
     findings,
     transit: null,
     citations: getCitations(findings.flatMap((f) => f.citationIds)),
@@ -537,7 +537,7 @@ export function analyzeShipment(
       kind: "action",
       title: "Tell us what's in the box",
       detail:
-        "Commodity drives everything — hazmat class, duty rate, carrier acceptance. One more phrase in the description and the pre-flight sharpens up.",
+        "Commodity drives everything: hazmat class, duty rate, carrier acceptance. One more phrase in the description and the pre-flight sharpens up.",
       citationIds: ["your-input"],
     });
   }

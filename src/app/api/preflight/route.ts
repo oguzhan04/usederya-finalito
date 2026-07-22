@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 const MAX_QUERY_CHARS = 600;
 
 /* ---------------------------------------------------------------------------
- * Rate limiting — in-memory sliding windows, per IP + a global guard.
+ * Rate limiting: in-memory sliding windows, per IP + a global guard.
  * No persistence by design: nothing a visitor types is stored anywhere.
  * ------------------------------------------------------------------------- */
 
@@ -55,7 +55,7 @@ function rateLimited(ip: string): number | null {
 
 /* ---------------------------------------------------------------------------
  * Claude fact extraction (optional). The model only pulls structured facts out
- * of the visitor's text — the verdict and every number come from the
+ * of the visitor's text: the verdict and every number come from the
  * deterministic rules engine, so nothing numeric can be hallucinated.
  * ------------------------------------------------------------------------- */
 
@@ -147,7 +147,7 @@ async function extractFactsWithClaude(query: string): Promise<Partial<ShipmentFa
 /* ---------------------------------------------------------------------------
  * Live USITC duty-rate check. Confirms our cached duty rate against the
  * public HTS REST endpoint; on success the citation is flagged "live".
- * Never overrides the curated number — a mismatch keeps the cached value.
+ * Never overrides the curated number: a mismatch keeps the cached value.
  * ------------------------------------------------------------------------- */
 
 const liveHtsChecks = new Map<string, boolean>();
@@ -190,7 +190,7 @@ export async function POST(request: Request) {
   }
   if (query.length < 8 || query.length > MAX_QUERY_CHARS) {
     return NextResponse.json(
-      { error: `Describe the shipment in 8–${MAX_QUERY_CHARS} characters.` },
+      { error: `Describe the shipment in 8-${MAX_QUERY_CHARS} characters.` },
       { status: 400 },
     );
   }
@@ -202,13 +202,13 @@ export async function POST(request: Request) {
   const retryAfter = rateLimited(ip);
   if (retryAfter !== null) {
     return NextResponse.json(
-      { error: "Rate limit reached — try one of the examples, or wait a moment.", retryAfter },
+      { error: "Rate limit reached. Try one of the examples, or wait a moment.", retryAfter },
       { status: 429, headers: { "Retry-After": String(retryAfter) } },
     );
   }
 
   const parsed = parseShipment(query);
-  // Prohibited/evasive queries are refused by the engine — don't spend an
+  // Prohibited/evasive queries are refused by the engine: don't spend an
   // extraction call on them.
   const extracted = isProhibitedQuery(query) ? null : await extractFactsWithClaude(query);
 

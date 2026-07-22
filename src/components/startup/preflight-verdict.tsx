@@ -296,8 +296,8 @@ export function PreflightVerdict({ result, onRestart }: PreflightVerdictProps) {
             This is what every Derya quote comes with.
           </p>
           <p className="text-[13px] text-muted-foreground">
-            Send us the same sentence and a human-checked pre-flight, rates and
-            booking come back — usually within the day.
+            Send us the same brief and a human-checked pre-flight, rates and
+            booking come back, usually within the day.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -321,8 +321,8 @@ export function PreflightVerdict({ result, onRestart }: PreflightVerdictProps) {
 
       <p className="text-[11px] leading-relaxed text-muted-foreground/70">
         Demo output is informational, generated from the cited public sources and
-        your description — not a rate quote or compliance ruling. Rules and duty
-        stacks change; we re-verify everything at booking.
+        the shipment brief. It is not a rate quote or compliance ruling. Rules
+        and duty stacks change; we re-verify everything at booking.
       </p>
     </motion.div>
   );

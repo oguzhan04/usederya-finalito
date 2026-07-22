@@ -5,9 +5,9 @@ import { PreflightDemo } from "@/components/startup/preflight-demo";
 import { FooterSection } from "@/components/sections/footer-section";
 
 export const metadata: Metadata = {
-  title: "Load Pre-Flight — Shipping Intelligence for Startups",
+  title: "Load Pre-Flight: Shipping Intelligence for Startups",
   description:
-    "Run a pre-flight on a real startup shipment and get a GO / NO-GO verdict with cited blockers, risks and actions — duty rates from USITC, hazmat rules from 49 CFR, carrier records from FMCSA. No login.",
+    "Run a pre-flight on a real startup shipment and get a GO / NO-GO verdict with cited blockers, risks and actions: duty rates from USITC, hazmat rules from 49 CFR, carrier records from FMCSA. No login.",
 };
 
 const PROOF_POINTS = [
@@ -15,7 +15,7 @@ const PROOF_POINTS = [
     icon: FileSearch2,
     title: "Cited, not vibes",
     description:
-      "Every number traces to a public source — USITC duty rates, CBP rulings, FMCSA records, 49 CFR. Hit “Sources” on any verdict and check us.",
+      "Every number traces to a public source: USITC duty rates, CBP rulings, FMCSA records, 49 CFR. Hit “Sources” on any verdict and check us.",
   },
   {
     icon: UserRoundX,
@@ -27,7 +27,7 @@ const PROOF_POINTS = [
     icon: Ship,
     title: "A real desk behind it",
     description:
-      "Derya is an AI-native freight forwarder. The same checks run on every live quote — with a human signing off before anything moves.",
+      "Derya is an AI-native freight forwarder. The same checks run on every live quote, with a human signing off before anything moves.",
   },
 ];
 
@@ -49,7 +49,7 @@ export default function StartupPage() {
                 Pre-flight your shipment before you book it.
               </h1>
               <p className="text-base md:text-lg text-center text-muted-foreground font-medium text-balance leading-relaxed tracking-tight max-w-2xl">
-                Pick a real startup load — get a GO / NO-GO verdict with the
+                Pick a real startup load and get a GO / NO-GO verdict with the
                 specific blockers, risks and actions. Hazmat rules, tariff
                 exposure, insurance gaps, theft windows, transit math. Every
                 number cited to public data.
@@ -80,7 +80,7 @@ export default function StartupPage() {
       <section id="preflight-cta" className="w-full">
         <div className="flex flex-col items-center gap-5 px-6 py-16 text-center">
           <h2 className="text-2xl md:text-3xl font-medium tracking-tighter text-primary max-w-xl text-balance">
-            Ship it for real — same sentence, real quote.
+            Ship it for real. Same brief, real quote.
           </h2>
           <p className="text-sm md:text-base text-muted-foreground max-w-xl text-balance">
             Send the same description to our desk and get a human-checked

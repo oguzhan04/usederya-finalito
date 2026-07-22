@@ -8,7 +8,7 @@ export interface CannedExample {
   hint: string;
   /** The text dropped into the input box. */
   query: string;
-  /** Hand-authored facts — precomputed, no parsing or network needed. */
+  /** Hand-authored facts: precomputed, no parsing or network needed. */
   facts: ShipmentFacts;
 }
 
