@@ -33,18 +33,11 @@ function StepDot({ done }: { done: boolean }) {
 interface PreflightRunProps {
   result: PreflightResult;
   revealed: number;
-  crossChecking: boolean;
   ready: boolean;
   onView: () => void;
 }
 
-export function PreflightRun({
-  result,
-  revealed,
-  crossChecking,
-  ready,
-  onView,
-}: PreflightRunProps) {
+export function PreflightRun({ result, revealed, ready, onView }: PreflightRunProps) {
   const steps = result.timeline;
 
   return (
@@ -99,16 +92,6 @@ export function PreflightRun({
                 </div>
               );
             })}
-            {crossChecking && (
-              <div className="flex items-center gap-4 py-2.5">
-                <span className="relative z-10 flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary/15">
-                  <span className="size-2 rounded-full bg-secondary animate-ping" />
-                </span>
-                <p className="text-sm md:text-[15px] font-medium text-secondary/80 animate-pulse">
-                  Cross-checking live sources…
-                </p>
-              </div>
-            )}
           </motion.div>
         ) : (
           <motion.div

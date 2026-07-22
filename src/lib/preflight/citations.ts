@@ -249,6 +249,28 @@ export const CITATIONS: Record<string, Citation> = {
     freshness: "cached",
     asOf: CACHED_AS_OF,
   },
+  "cbp-prohibited": {
+    id: "cbp-prohibited",
+    label: "CBP prohibited & restricted items",
+    publisher: "U.S. Customs & Border Protection",
+    title:
+      "Prohibited and restricted merchandise — goods that may not enter U.S. commerce, or only under license",
+    url: "https://www.cbp.gov/travel/us-citizens/know-before-you-go/prohibited-and-restricted-items",
+    backs: "Why this shipment is refused",
+    freshness: "cached",
+    asOf: CACHED_AS_OF,
+  },
+  "usc-1595a": {
+    id: "usc-1595a",
+    label: "19 U.S.C. §1595a",
+    publisher: "U.S. Code",
+    title:
+      "Merchandise introduced contrary to law — seizure and forfeiture; penalties extend to anyone who facilitates the movement",
+    url: "https://www.law.cornell.edu/uscode/text/19/1595a",
+    backs: "The legal exposure for carriers and forwarders that touch it",
+    freshness: "cached",
+    asOf: CACHED_AS_OF,
+  },
   "derya-desk": {
     id: "derya-desk",
     label: "Derya operating data",

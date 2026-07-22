@@ -7,7 +7,7 @@ import { FooterSection } from "@/components/sections/footer-section";
 export const metadata: Metadata = {
   title: "Load Pre-Flight — Shipping Intelligence for Startups",
   description:
-    "Type any shipment in plain English and get a GO / NO-GO verdict with cited blockers, risks and actions — duty rates from USITC, hazmat rules from 49 CFR, carrier records from FMCSA. No login.",
+    "Run a pre-flight on a real startup shipment and get a GO / NO-GO verdict with cited blockers, risks and actions — duty rates from USITC, hazmat rules from 49 CFR, carrier records from FMCSA. No login.",
 };
 
 const PROOF_POINTS = [
@@ -21,7 +21,7 @@ const PROOF_POINTS = [
     icon: UserRoundX,
     title: "No login, no persistence",
     description:
-      "Type a load, get a verdict. Nothing you enter is stored, and there's no gate between you and the answer.",
+      "Pick a load, get a verdict. Nothing is stored, and there's no gate between you and the answer.",
   },
   {
     icon: Ship,
@@ -49,8 +49,8 @@ export default function StartupPage() {
                 Pre-flight your shipment before you book it.
               </h1>
               <p className="text-base md:text-lg text-center text-muted-foreground font-medium text-balance leading-relaxed tracking-tight max-w-2xl">
-                Type any load in plain English — get a GO / NO-GO verdict with
-                the specific blockers, risks and actions. Hazmat rules, tariff
+                Pick a real startup load — get a GO / NO-GO verdict with the
+                specific blockers, risks and actions. Hazmat rules, tariff
                 exposure, insurance gaps, theft windows, transit math. Every
                 number cited to public data.
               </p>

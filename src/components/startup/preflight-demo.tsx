@@ -7,78 +7,40 @@ import { PreflightRun } from "@/components/startup/preflight-run";
 import { PreflightVerdict } from "@/components/startup/preflight-verdict";
 import { analyzeShipment } from "@/lib/preflight/engine";
 import { CANNED_EXAMPLES } from "@/lib/preflight/examples";
-import { parseShipment } from "@/lib/preflight/parser";
 import type { PreflightResult } from "@/lib/preflight/types";
 import { cn } from "@/lib/utils";
 
 type Stage = "input" | "running" | "ready" | "verdict";
 
-const MAX_CHARS = 600;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-async function fetchPreflight(query: string): Promise<PreflightResult | null> {
-  try {
-    const res = await fetch("/api/preflight", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ query }),
-      signal: AbortSignal.timeout(12_000),
-    });
-    if (!res.ok) return null;
-    return (await res.json()) as PreflightResult;
-  } catch {
-    // Slow or unavailable live feed — the caller falls back to the local engine.
-    return null;
-  }
-}
 
 export function PreflightDemo() {
   const [stage, setStage] = useState<Stage>("input");
-  const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState(CANNED_EXAMPLES[0].id);
   const [result, setResult] = useState<PreflightResult | null>(null);
   const [revealed, setRevealed] = useState(0);
-  const [crossChecking, setCrossChecking] = useState(false);
   const runIdRef = useRef(0);
 
-  const trimmed = query.trim();
-  const canRun = trimmed.length >= 8;
+  const selected = CANNED_EXAMPLES.find((e) => e.id === selectedId) ?? CANNED_EXAMPLES[0];
 
   async function run() {
-    if (!canRun) return;
     const myRun = ++runIdRef.current;
 
-    const canned = CANNED_EXAMPLES.find((e) => e.query === trimmed);
-    // Local result computes instantly: it drives the check animation and is
-    // the precomputed fallback if the live route is slow or rate-limited.
-    const localResult = analyzeShipment(
-      canned ? canned.facts : parseShipment(trimmed),
-      "local",
-    );
-    const apiPromise = canned ? null : fetchPreflight(trimmed);
+    // Results are precomputed from hand-checked facts — instant, no network.
+    const nextResult = analyzeShipment(selected.facts, "local");
 
-    setResult(localResult);
+    setResult(nextResult);
     setRevealed(0);
-    setCrossChecking(false);
     setStage("running");
 
     await sleep(300);
-    for (let i = 0; i < localResult.timeline.length; i++) {
+    for (let i = 0; i < nextResult.timeline.length; i++) {
       if (runIdRef.current !== myRun) return;
       setRevealed(i + 1);
       await sleep(i === 0 ? 320 : 380 + Math.random() * 220);
     }
     if (runIdRef.current !== myRun) return;
 
-    let finalResult = localResult;
-    if (apiPromise) {
-      setCrossChecking(true);
-      const apiResult = await apiPromise;
-      if (runIdRef.current !== myRun) return;
-      if (apiResult) finalResult = apiResult;
-      setCrossChecking(false);
-    }
-
-    setResult(finalResult);
     await sleep(450);
     if (runIdRef.current !== myRun) return;
     setStage("ready");
@@ -89,10 +51,6 @@ export function PreflightDemo() {
     setStage("input");
     setResult(null);
     setRevealed(0);
-  }
-
-  function pickExample(exampleQuery: string) {
-    setQuery(exampleQuery);
   }
 
   return (
@@ -116,70 +74,60 @@ export function PreflightDemo() {
               <div className="flex flex-col gap-2">
                 <p className="text-sm font-medium text-secondary">1 / 3</p>
                 <h3 className="text-2xl md:text-3xl font-medium tracking-tighter text-primary">
-                  Describe a shipment in plain English.
+                  Pick a shipment.
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Commodity, lane, value, dates — however you&apos;d say it to a
-                  colleague.
+                  Four real startup loads, written the way you&apos;d actually
+                  brief them.
                 </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {CANNED_EXAMPLES.map((example) => {
+                  const active = selectedId === example.id;
+                  return (
+                    <button
+                      key={example.id}
+                      type="button"
+                      onClick={() => setSelectedId(example.id)}
+                      className={cn(
+                        "group flex items-start gap-3 rounded-xl border bg-white p-4 text-left transition-all",
+                        active
+                          ? "border-secondary ring-1 ring-secondary"
+                          : "border-border hover:border-secondary/50",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border transition-colors",
+                          active
+                            ? "border-secondary bg-secondary"
+                            : "border-border bg-white group-hover:border-secondary/50",
+                        )}
+                      >
+                        {active && <span className="size-1.5 rounded-full bg-white" />}
+                      </span>
+                      <span className="flex flex-col gap-0.5">
+                        <span className="text-sm font-medium text-primary">
+                          {example.label}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {example.hint}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
 
               <div className="flex flex-col gap-2">
-                <textarea
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value.slice(0, MAX_CHARS))}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) run();
-                  }}
-                  rows={3}
-                  placeholder="e.g. 8 pallets of lithium batteries, Fremont to Austin, $180k, pickup Friday"
-                  className="w-full resize-none rounded-xl border border-border bg-white px-4 py-3.5 text-[15px] text-primary shadow-[0_1px_1px_rgba(16,24,40,0.02)] outline-none transition placeholder:text-muted-foreground/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                />
-                <p className="text-xs text-muted-foreground/70 text-right">
-                  {trimmed.length}/{MAX_CHARS}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  Or start from a real one
+                  The plain-English brief
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {CANNED_EXAMPLES.map((example) => {
-                    const active = trimmed === example.query;
-                    return (
-                      <button
-                        key={example.id}
-                        type="button"
-                        onClick={() => pickExample(example.query)}
-                        className={cn(
-                          "group flex items-start gap-3 rounded-xl border bg-white p-4 text-left transition-all",
-                          active
-                            ? "border-secondary ring-1 ring-secondary"
-                            : "border-border hover:border-secondary/50",
-                        )}
-                      >
-                        <span
-                          className={cn(
-                            "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border transition-colors",
-                            active
-                              ? "border-secondary bg-secondary"
-                              : "border-border bg-white group-hover:border-secondary/50",
-                          )}
-                        >
-                          {active && <span className="size-1.5 rounded-full bg-white" />}
-                        </span>
-                        <span className="flex flex-col gap-0.5">
-                          <span className="text-sm font-medium text-primary">
-                            {example.label}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {example.hint}
-                          </span>
-                        </span>
-                      </button>
-                    );
-                  })}
+                <div className="rounded-xl border border-border bg-white px-4 py-3.5">
+                  <p className="text-[15px] leading-relaxed text-primary">
+                    “{selected.query}”
+                  </p>
                 </div>
               </div>
 
@@ -187,14 +135,13 @@ export function PreflightDemo() {
                 <button
                   type="button"
                   onClick={run}
-                  disabled={!canRun}
-                  className="bg-secondary h-10 flex items-center justify-center gap-2 text-sm font-normal tracking-wide rounded-full text-primary-foreground dark:text-secondary-foreground px-7 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] border border-white/[0.12] hover:bg-secondary/80 transition-all ease-out active:scale-95 disabled:opacity-40 disabled:pointer-events-none"
+                  className="bg-secondary h-10 flex items-center justify-center gap-2 text-sm font-normal tracking-wide rounded-full text-primary-foreground dark:text-secondary-foreground px-7 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] border border-white/[0.12] hover:bg-secondary/80 transition-all ease-out active:scale-95"
                 >
                   Run Pre-Flight
                   <ArrowRight className="size-4" />
                 </button>
                 <p className="text-xs text-muted-foreground/70">
-                  No login. Nothing you type is stored.
+                  No login. Nothing is stored.
                 </p>
               </div>
             </motion.div>
@@ -205,7 +152,6 @@ export function PreflightDemo() {
               key="running"
               result={result}
               revealed={revealed}
-              crossChecking={crossChecking}
               ready={stage === "ready"}
               onView={() => setStage("verdict")}
             />

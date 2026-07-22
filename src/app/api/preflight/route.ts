@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { CITATIONS } from "@/lib/preflight/citations";
+import { isProhibitedQuery } from "@/lib/preflight/contraband";
 import { analyzeShipment } from "@/lib/preflight/engine";
 import { COMMODITIES } from "@/lib/preflight/knowledge";
 import { parseShipment } from "@/lib/preflight/parser";
@@ -207,7 +208,9 @@ export async function POST(request: Request) {
   }
 
   const parsed = parseShipment(query);
-  const extracted = await extractFactsWithClaude(query);
+  // Prohibited/evasive queries are refused by the engine — don't spend an
+  // extraction call on them.
+  const extracted = isProhibitedQuery(query) ? null : await extractFactsWithClaude(query);
 
   const facts: ShipmentFacts = extracted
     ? {

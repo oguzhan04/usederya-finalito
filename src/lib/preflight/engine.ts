@@ -1,4 +1,5 @@
 import { getCitations } from "./citations";
+import { isProhibitedQuery } from "./contraband";
 import {
   COMMODITIES,
   findPlace,
@@ -394,7 +395,10 @@ function buildHeadline(verdict: Verdict, findings: Finding[]): string {
     return `GO — with ${conditions} condition${conditions > 1 ? "s" : ""}.`;
   }
   const risks = findings.filter((f) => f.kind === "risk").length;
-  return risks > 0 ? "GO — watch the flags." : "GO — clean load.";
+  if (risks > 0) return "GO — watch the flags.";
+  return findings.some((f) => f.kind === "action")
+    ? "GO — housekeeping only."
+    : "GO — clean load.";
 }
 
 function buildSummary(ctx: RuleContext, verdict: Verdict): string {
@@ -468,6 +472,34 @@ function buildTimeline(ctx: RuleContext): TimelineStep[] {
   return steps;
 }
 
+function refuseProhibited(facts: ShipmentFacts, engine: "live" | "local"): PreflightResult {
+  const findings: Finding[] = [
+    {
+      kind: "blocker",
+      hard: true,
+      title: "Prohibited cargo or evasive routing",
+      detail:
+        "U.S. law bars moving prohibited merchandise or introducing goods contrary to law, and carriers, forwarders and brokers are required to refuse it — the liability extends to everyone who touches the load. Licensed-but-controlled goods (pharmaceuticals, firearms) move only through a compliance desk with permits on file, not a public demo.",
+      citationIds: ["cbp-prohibited", "usc-1595a"],
+    },
+  ];
+  return {
+    verdict: "NO_GO",
+    headline: "NO-GO — full stop.",
+    summary:
+      "This isn't a lane we'll pre-flight. Derya moves legal, declarable freight — prohibited cargo and customs-evasion routings have no re-spec. If we've misread a legitimate load, rephrase it (e.g. “pharmaceuticals”, “licensed sporting goods”) and run it again.",
+    findings,
+    transit: null,
+    citations: getCitations(findings.flatMap((f) => f.citationIds)),
+    facts,
+    timeline: [
+      { label: "Parsing shipment from plain English…" },
+      { label: "Screening prohibited & restricted cargo lists…" },
+    ],
+    engine,
+  };
+}
+
 /**
  * Deterministic rules engine: ShipmentFacts → verdict + cited findings.
  * Runs identically in the browser (fallback) and on the server.
@@ -476,6 +508,7 @@ export function analyzeShipment(
   facts: ShipmentFacts,
   engine: "live" | "local" = "local",
 ): PreflightResult {
+  if (isProhibitedQuery(facts.query)) return refuseProhibited(facts, engine);
   const commodity = commodityOf(facts);
   const origin = placeOf(facts.originCity);
   const dest = placeOf(facts.destinationCity);
