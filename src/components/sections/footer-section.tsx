@@ -11,7 +11,7 @@ export function FooterSection() {
 
   return (
     <footer id="footer" className="w-full pb-0">
-      {/* Footer link columns + logo block hidden for now — those pages aren't live yet.
+      {/* Footer link columns + logo block hidden for now: those pages aren't live yet.
       <div className="flex flex-col md:flex-row md:items-center md:justify-between p-10">
         <div className="flex flex-col items-start justify-start gap-y-5 max-w-xs mx-0">
           <Link

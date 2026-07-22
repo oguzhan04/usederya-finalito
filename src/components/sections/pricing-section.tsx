@@ -125,7 +125,7 @@ function Field({
 }
 
 export function PricingSection({
-  title = "Request a quote from — free",
+  title = "Request a quote for free",
   compactHeader = false,
 }: {
   title?: string;
@@ -471,15 +471,15 @@ export function PricingSection({
                       <option value="" disabled>
                         Who handles customs clearance?
                       </option>
-                      <option value="derya-both">Derya — both ends</option>
+                      <option value="derya-both">Derya, both ends</option>
                       <option value="derya-origin">
-                        Derya — origin (export) only
+                        Derya, origin (export) only
                       </option>
                       <option value="derya-destination">
-                        Derya — destination (import) only
+                        Derya, destination (import) only
                       </option>
                       <option value="own-broker">We use our own broker</option>
-                      <option value="unsure">Not sure — advise me</option>
+                      <option value="unsure">Not sure, advise me</option>
                     </select>
                   </label>
                   {serviceNeeded && serviceNeeded !== "Port to port" && (
@@ -621,7 +621,7 @@ export function PricingSection({
                         name="Dimensions"
                         required={cargoUnlocked && loadType === "LCL"}
                         disabled={!cargoUnlocked || loadType !== "LCL"}
-                        placeholder="One line per piece — L×W×H and number of packages"
+                        placeholder="One line per piece: L×W×H and number of packages"
                         onBlur={markTouched}
                         onInvalid={markTouched}
                       />

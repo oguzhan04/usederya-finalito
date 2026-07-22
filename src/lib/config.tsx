@@ -244,7 +244,7 @@ export const siteConfig = {
         ),
         title: "For Freight Forwarders",
         description:
-          "Lead generation is what Derya does best so far — we source deals and generate leads for freight forwarding offices, and back them with financing options.",
+          "Lead generation is what Derya does best so far: we source deals and generate leads for freight forwarding offices, and back them with financing options.",
       },
       {
         id: 4,

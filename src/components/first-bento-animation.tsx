@@ -10,11 +10,11 @@ import { AnimatePresence, motion, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 export function ReasoningBasic() {
-  const reasoningText = `Received 87 quotes — only 13 included references. Buyers also asked about L/C vs B/L and payment terms. I've emailed the buyer the top quotes:
+  const reasoningText = `Received 87 quotes, only 13 included references. Buyers also asked about L/C vs B/L and payment terms. I've emailed the buyer the top quotes:
 
-1. Dominic S.S Hommes / End to End Global — USD 140/MT (350 MT/month, 7–15 day lead, FOB)
-2. Vanama Global Trading — USD 180/MT (1×40' FCL, South Africa, 15–19 days)
-3. Dyck Trading — EUR 190/MT (300 MT, Austria / FOB Linz, monthly possible)`;
+1. Dominic S.S Hommes / End to End Global: USD 140/MT (350 MT/month, 7-15 day lead, FOB)
+2. Vanama Global Trading: USD 180/MT (1×40' FCL, South Africa, 15-19 days)
+3. Dyck Trading: EUR 190/MT (300 MT, Austria / FOB Linz, monthly possible)`;
 
   return (
     <Reasoning>
