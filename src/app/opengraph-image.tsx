@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 
 // Configuration exports
 export const runtime = "edge";
-export const alt = "Derya — AI-native freight forwarding";
+export const alt = "Derya, the AI-native freight forwarder";
 export const size = {
   width: 1200,
   height: 630,
